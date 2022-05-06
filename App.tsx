@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { useFonts, Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
+import * as SplashScreen from 'expo-splash-screen';
+import React from 'react';
+import { KeyboardAvoidingView, Platform, StatusBar, View } from 'react-native';
+import  Widget from './src/components/FeedbackButton/Widget';
+import { theme } from './src/theme';
+import FlashMessage from 'react-native-flash-message';
+import { LogBox } from 'react-native';
+   LogBox.ignoreLogs([
+  "[react-native-gesture-handler]",
+]);
 export default function App() {
+  SplashScreen.preventAutoHideAsync();
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
+  SplashScreen.hideAsync();
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <KeyboardAvoidingView 
+    behavior={Platform.OS === "ios" ? "height" : "padding"}
+    style={{flex: 1}}>
+      <View style={{
+      flex: 1,
+      backgroundColor: theme.colors.background
+    }}>
+      <StatusBar 
+          style="light" 
+          backgroundColor="transparent" 
+          translucent
+        />
+        <FlashMessage position="top" />
+        <Widget />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
